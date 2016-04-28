@@ -3,8 +3,9 @@
 # compute score for each truth sample, by looking back for the most recent contestant heart-rate estimate
 
 THEDIR=$1
-echo "Computing score for ${THEDIR}"
+echo -n "For ${THEDIR}, "
 
 ./join_truth_to_pyhr.sh ${THEDIR} 1000000 > ${THEDIR}/joined.csv
-awk -F, 'BEGIN { sum=0; count=0} { sum += ($4 - $3)**2; count++} END {print count, sum/count, sqrt(sum/count)}' ${THEDIR}/joined.csv
+awk -F, 'BEGIN { sumsq=0; count=0} { sumsq += ($4 - $3)**2; count++} END {print "RMSE score =", sqrt(sumsq/count)}' ${THEDIR}/joined.csv
+echo
 awk -F, '{ print ($4 - $3) }' ${THEDIR}/joined.csv | histogram.py
