@@ -26,6 +26,12 @@ truth_entry = download_truth()
 truth = parse_entry(truth_entry, 'truth')
 
 def compute_score(submission_entry, debug):
+    '''
+    submission_entry: a string containing a submission
+    debug: boolean indicating whether to pring some debug output to stdout
+
+    returns: a single float, the score for that submission
+    '''
     submission = parse_entry(submission_entry, 'submission')
     together = sorted(truth + submission, key=lambda x: x[1])
     sumsq = defaultdict(int)
