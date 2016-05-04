@@ -9,30 +9,30 @@ def download_sample_submission():
     r =  requests.get('https://gist.github.com/dsjoerg/31dc30981d59016df8c174b1960372d8/raw/b81ae0ba99b5666f725607d216b285a2f2b2787d/gistfile1.txt')
     return r.text
     
-def parse_entry(entry, entrytype):
+def parse_entry(entry_fd, entrytype):
     ''' parse a big set of lines of format
     timestamp,value
     
     into a list of lists of [sampleid, timestamp, entrytype, value]
     '''
     result = list()
-    f = StringIO.StringIO(entry)
-    reader = csv.reader(f, delimiter=',')
+    reader = csv.reader(entry_fd, delimiter=',')
     for row in reader:
         result.append([row[0], row[1], entrytype, float(row[2])])
     return result
     
 truth_entry = download_truth()
-truth = parse_entry(truth_entry, 'truth')
+truth_entry_fd = StringIO.StringIO(truth_entry)
+truth = parse_entry(truth_entry_fd, 'truth')
 
-def compute_score(submission_entry, debug):
+def compute_score(submission_fd, debug):
     '''
-    submission_entry: a string containing a submission
+    submission_entry: a file-like object containing a submission
     debug: boolean indicating whether to pring some debug output to stdout
 
     returns: a single float, the score for that submission
     '''
-    submission = parse_entry(submission_entry, 'submission')
+    submission = parse_entry(submission_fd, 'submission')
     together = sorted(truth + submission, key=lambda x: x[1])
     sumsq = defaultdict(int)
     count = defaultdict(int)
@@ -67,7 +67,8 @@ def compute_score(submission_entry, debug):
 
 def do_sample_example():
     sample_entry = download_sample_submission()
-    score = compute_score(sample_entry, True)
+    sample_entry_fd = StringIO.StringIO(sample_entry)
+    score = compute_score(sample_entry_fd, True)
 
 if __name__ == '__main__':
     do_sample_example()
