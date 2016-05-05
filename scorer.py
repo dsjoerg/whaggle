@@ -1,7 +1,10 @@
-import csv, math, requests, StringIO
+import csv, math, os, requests, StringIO
 from collections import defaultdict
 
 def download_truth():
+    truthpath = '/tmp/truth.csv'
+    if os.path.isfile(truthpath):
+        return open(truthpath, 'r').read()
     r =  requests.get('https://gist.githubusercontent.com/dsjoerg/0c93acfe7853ba26d692dc7ceac9d9ef/raw/e538c40194fc3d66bec2a0f6bc738c05e0af2a93/gistfile1.txt')
     return r.text
 
