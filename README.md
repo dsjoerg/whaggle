@@ -21,3 +21,8 @@ or
 # to try the python scoring function
 
 `python scorer.py`
+
+
+# to look at distributions of truth and pyhr from one sample
+
+`./show_one_score.sh 20160510_from_ritscher_working_copy/tltraw 160224_190025_740`

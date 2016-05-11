@@ -35,3 +35,16 @@ tail +3 ${DIR_TO_ANALYZE}/*.py.hr.txt  | head -${MAX_ROWS} | awk -F, '{print $2}
 
 echo "TRUTH"
 tail +3 ${DIR_TO_ANALYZE}/*.truth  | head -${MAX_ROWS} | awk -F, '{print $2}' | histogram.py
+
+echo "GALVANIC SKIN RESPONSE"
+tail +3 ${DIR_TO_ANALYZE}/*.gsr  | head -${MAX_ROWS} | awk '{print $2}' | histogram.py
+
+for fftfile in ${DIR_TO_ANALYZE}/*FFTPeaks*;
+do
+    echo "${fftfile}"
+    for i in `seq 2 3`;
+    do
+        echo "COLUMN ${i} of ${fftfile}"
+        tail +3 ${fftfile} | head -${MAX_ROWS} | awk '{print $'"${i}"'}' | histogram.py
+    done
+done
